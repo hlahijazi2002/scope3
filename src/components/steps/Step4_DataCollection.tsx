@@ -20,7 +20,6 @@ import {
   MONITORING_METHOD_OPTIONS,
   PRIMARY_DATA_SOURCES,
 } from "@/data/scope3Categories";
-import ChipSelector from "@/components/ui/ChipSelector";
 import UploadCard from "@/components/ui/UploadCard";
 import SupplierDrawer from "@/components/ui/SupplierDrawer";
 import type { Supplier } from "@/types/assessment.types";
@@ -272,6 +271,15 @@ function PurchasedGoodsPanel() {
         </div>
       </div>
 
+      {/* ── Other field ── */}
+      <div className="mt-3">
+        <input
+          type="text"
+          placeholder="Other goods or services not listed above..."
+          className="w-full px-4 py-2.5 rounded-xl border border-dashed border-[#E5E7EB] text-[13px] font-['Poppins'] text-[#1D1F21] placeholder-[#9CA3AF] outline-none focus:border-[#1FA971] focus:ring-4 focus:ring-[#1FA971]/10 transition-all bg-[#F9FAFB]"
+        />
+      </div>
+
       {/* ── 2: Supplier capture ── */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
         <div className="flex items-center justify-between mb-1">
@@ -374,12 +382,6 @@ function PurchasedGoodsPanel() {
         <p className="text-[12px] text-[#6B7280] mb-3">
           How does your company currently track procurement data?
         </p>
-        <ChipSelector
-          options={monitoringOptions}
-          selected={(response?.monitoringMethods ?? []) as string[]}
-          onChange={() => {}}
-          multiSelect
-        />
         <div className="flex flex-wrap gap-2 mt-3">
           {monitoringOptions.map((opt) => {
             const isSelected = (
@@ -480,7 +482,313 @@ function PurchasedGoodsPanel() {
   );
 }
 
-// GENERIC CATEGORY PANEL
+// CATEGORY-SPECIFIC EXTRA QUESTIONS
+
+const TRANSPORT_MODES = [
+  "Road Freight",
+  "Air Freight",
+  "Rail Freight",
+  "Marine Shipping",
+  "Courier/Parcel Services",
+];
+
+const TRAVEL_MODES = [
+  "Air Travel",
+  "Rail",
+  "Taxi/Ride Sharing",
+  "Personal Vehicles",
+  "Hotel Accommodation",
+];
+
+const COMMUTE_MODES = [
+  "Personal Car",
+  "Carpool",
+  "Bus",
+  "Metro/Train",
+  "Motorcycle",
+  "Bicycle",
+  "Walking",
+  "Company Transport",
+];
+
+const WASTE_CATEGORIES = [
+  "General Municipal Waste",
+  "Food / Organic Waste",
+  "Paper & Cardboard",
+  "Plastic Waste",
+  "Glass Waste",
+  "Metal Scrap",
+  "Wood Waste",
+  "E-Waste",
+  "Hazardous Waste",
+  "Construction & Demolition Waste",
+  "Wastewater",
+];
+
+const WASTE_DISPOSAL = [
+  "Recycling",
+  "Landfill",
+  "Incineration",
+  "Composting",
+  "Waste-to-energy",
+  "Hazardous treatment",
+];
+
+const CAT_MONITORING: Record<number, string[]> = {
+  2: [
+    "Amount Spent",
+    "Quantity Purchased",
+    "Asset Register Tracking",
+    "Depreciation Records",
+    "Not Tracked",
+  ],
+  4: [
+    "Distance-based data (km)",
+    "Fuel consumption data",
+    "Freight spend/cost",
+    "Shipment weight and distance",
+    "Not Tracked",
+  ],
+  5: [
+    "Weight-based (kg/tonnes)",
+    "Vendor disposal certificates",
+    "Waste manifests",
+    "Recycling reports",
+    "Vendor invoices",
+    "Not Tracked",
+  ],
+  6: [
+    "Distance traveled",
+    "Travel spend/bills",
+    "Travel agency records",
+    "Hotel stay records",
+    "Not Tracked",
+  ],
+  7: [
+    "Employee surveys",
+    "Distance estimation",
+    "Attendance records",
+    "Fuel reimbursement records",
+    "Public transport usage",
+    "Not Tracked",
+  ],
+  8: [
+    "Lease agreements",
+    "Utility consumption data",
+    "Fuel consumption",
+    "Facility area (m²)",
+    "Vendor invoices",
+    "Not Tracked",
+  ],
+  9: [
+    "Distance-based tracking",
+    "Shipment weight and distance",
+    "Logistics provider data",
+    "Freight spend",
+    "Fuel data",
+    "Not Tracked",
+  ],
+  10: [
+    "Customer usage assumptions",
+    "Product composition data",
+    "Customer-specific processing data",
+    "Not Tracked",
+  ],
+  11: [
+    "Product specifications",
+    "Estimated lifetime usage",
+    "Energy efficiency ratings",
+    "Customer usage assumptions",
+    "Not Tracked",
+  ],
+  12: [
+    "Material composition data",
+    "Recycling assumptions",
+    "Disposal assumptions",
+    "Product recovery data",
+    "Not Tracked",
+  ],
+  13: [
+    "Lease agreements",
+    "Utility consumption",
+    "Usage assumptions",
+    "Customer operational data",
+    "Not Tracked",
+  ],
+  14: [
+    "Franchise operational data",
+    "Energy consumption",
+    "Utility bills",
+    "Sales/activity data",
+    "Not Tracked",
+  ],
+  15: [
+    "Financial records",
+    "Investment portfolio data",
+    "ESG disclosures",
+    "Not Tracked",
+  ],
+};
+
+function CategoryExtraQuestions({
+  categoryId,
+  response,
+  dispatch,
+}: {
+  categoryId: number;
+  response: ReturnType<
+    typeof useAssessment
+  >["state"]["categoryResponses"][number];
+  dispatch: ReturnType<typeof useAssessment>["dispatch"];
+}) {
+  const toggleSubItem = (item: string) => {
+    const current = response?.selectedSubItems ?? [];
+    const updated = current.includes(item)
+      ? current.filter((i) => i !== item)
+      : [...current, item];
+    dispatch({
+      type: "SET_CATEGORY_RESPONSE",
+      payload: { categoryId, data: { selectedSubItems: updated } },
+    });
+  };
+
+  const selected = response?.selectedSubItems ?? [];
+
+  // Transport modes — Cat 4 & 9
+  if (categoryId === 4 || categoryId === 9) {
+    return (
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+        <SectionHeader
+          number="2"
+          title="Which transportation modes are commonly used?"
+        />
+        <div className="flex flex-wrap gap-2">
+          {TRANSPORT_MODES.map((mode) => (
+            <button
+              key={mode}
+              onClick={() => toggleSubItem(mode)}
+              className={`px-3 py-1.5 rounded-xl border text-[12px] font-medium transition-all ${selected.includes(mode) ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#1FA971]/40"}`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Waste categories — Cat 5
+  if (categoryId === 5) {
+    return (
+      <>
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+          <SectionHeader
+            number="2"
+            title="Which waste categories does your company generate?"
+          />
+          <div className="flex flex-wrap gap-2">
+            {WASTE_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => toggleSubItem(cat)}
+                className={`px-3 py-1.5 rounded-xl border text-[12px] font-medium transition-all ${selected.includes(cat) ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#1FA971]/40"}`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+          <SectionHeader number="3" title="Waste disposal tracking method" />
+          <div className="flex flex-wrap gap-2">
+            {WASTE_DISPOSAL.map((method) => (
+              <button
+                key={method}
+                onClick={() => toggleSubItem(`disposal_${method}`)}
+                className={`px-3 py-1.5 rounded-xl border text-[12px] font-medium transition-all ${selected.includes(`disposal_${method}`) ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#1FA971]/40"}`}
+              >
+                {method}
+              </button>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Travel modes — Cat 6
+  if (categoryId === 6) {
+    return (
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+        <SectionHeader
+          number="2"
+          title="Which business travel modes are commonly used?"
+        />
+        <div className="flex flex-wrap gap-2">
+          {TRAVEL_MODES.map((mode) => (
+            <button
+              key={mode}
+              onClick={() => toggleSubItem(mode)}
+              className={`px-3 py-1.5 rounded-xl border text-[12px] font-medium transition-all ${selected.includes(mode) ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#1FA971]/40"}`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Commute modes — Cat 7
+  if (categoryId === 7) {
+    return (
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+        <SectionHeader
+          number="2"
+          title="Which commuting methods are commonly used?"
+        />
+        <div className="flex flex-wrap gap-2">
+          {COMMUTE_MODES.map((mode) => (
+            <button
+              key={mode}
+              onClick={() => toggleSubItem(mode)}
+              className={`px-3 py-1.5 rounded-xl border text-[12px] font-medium transition-all ${selected.includes(mode) ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#1FA971]/40"}`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Cat 15 — financed emissions
+  if (categoryId === 15) {
+    return (
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+        <SectionHeader
+          number="2"
+          title="Does your company currently calculate financed emissions?"
+        />
+        <div className="flex gap-3 mt-2">
+          {["Yes", "No", "Planned for future"].map((opt) => (
+            <button
+              key={opt}
+              onClick={() => toggleSubItem(`financed_${opt}`)}
+              className={`px-4 py-2 rounded-xl border text-[12px] font-semibold transition-all ${selected.includes(`financed_${opt}`) ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#1FA971]/40"}`}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+// GENERIC CATEGORY PANEL — updated
 
 function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
   const { state, dispatch } = useAssessment();
@@ -488,10 +796,10 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
   const cat = SCOPE3_CATEGORIES.find((c) => c.id === categoryId);
   if (!cat) return null;
 
-  const monitoringOptions = MONITORING_METHOD_OPTIONS.map((m) => ({
-    id: m.id,
-    label: m.label,
-  }));
+  const monitoringOptions = (
+    CAT_MONITORING[categoryId] ?? MONITORING_METHOD_OPTIONS.map((m) => m.label)
+  ).map((m) => ({ id: m, label: m }));
+
   const dataSourceOptions = PRIMARY_DATA_SOURCES.map((s) => ({
     id: s,
     label: s,
@@ -521,7 +829,7 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
 
   return (
     <>
-      {/* examples */}
+      {/* overview */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
         <SectionHeader number="1" title="Category Overview" />
         <p className="text-[13px] text-[#6B7280] leading-relaxed mb-4">
@@ -539,9 +847,16 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
         </div>
       </div>
 
-      {/* monitoring method */}
+      {/* category-specific extra questions */}
+      <CategoryExtraQuestions
+        categoryId={categoryId}
+        response={response}
+        dispatch={dispatch}
+      />
+
+      {/* monitoring method — category specific */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
-        <SectionHeader number="2" title="Data Monitoring Method" />
+        <SectionHeader number="3" title="Data Monitoring Method" />
         <div className="flex flex-wrap gap-2">
           {monitoringOptions.map((opt) => {
             const isSelected = (
@@ -562,7 +877,7 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
 
       {/* data sources */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
-        <SectionHeader number="3" title="Primary Data Sources" />
+        <SectionHeader number="4" title="Primary Data Sources" />
         <div className="flex flex-wrap gap-2">
           {dataSourceOptions.map((opt) => {
             const isSelected = (response?.primaryDataSources ?? []).includes(
@@ -583,7 +898,7 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
 
       {/* file upload */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
-        <SectionHeader number="4" title="Supporting Files" />
+        <SectionHeader number="5" title="Supporting Files" />
         <div className="grid grid-cols-2 gap-3">
           <UploadCard
             title="Activity Data"
@@ -600,7 +915,6 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
     </>
   );
 }
-
 // MAIN COMPONENT
 
 export default function Step4_DataCollection() {
@@ -684,6 +998,60 @@ export default function Step4_DataCollection() {
         </>
       )}
 
+      {/* ── Supplier Engagement ── */}
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-5 h-5 rounded-full bg-[#0F5F4B] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+            !
+          </div>
+          <span className="text-[13px] font-semibold text-[#1D1F21]">
+            Supplier Engagement
+          </span>
+          <div className="flex-1 h-px bg-[#E5E7EB]" />
+        </div>
+        <p className="text-[13px] text-[#6B7280] mb-4">
+          Does your company engage suppliers for sustainability or emissions
+          reporting?
+        </p>
+        <div className="flex gap-3">
+          {["Yes", "Partially", "No"].map((opt) => {
+            const key = `supplier_engagement_${opt}`;
+            const isSelected = (
+              state.categoryResponses[1]?.selectedSubItems ?? []
+            ).includes(key);
+            return (
+              <button
+                key={opt}
+                onClick={() => {
+                  const current =
+                    state.categoryResponses[1]?.selectedSubItems ?? [];
+                  const cleaned = current.filter(
+                    (i) => !i.startsWith("supplier_engagement_"),
+                  );
+                  const updated = isSelected ? cleaned : [...cleaned, key];
+                  dispatch({
+                    type: "SET_CATEGORY_RESPONSE",
+                    payload: {
+                      categoryId: 1,
+                      data: { selectedSubItems: updated },
+                    },
+                  });
+                }}
+                className={`
+            flex-1 py-3 rounded-xl border-2 text-[13px] font-semibold transition-all duration-200
+            ${
+              isSelected
+                ? "border-[#0F5F4B] bg-[#F3FBF7] text-[#0F5F4B]"
+                : "border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#1FA971]/40 hover:bg-[#F9FAFB]"
+            }
+          `}
+              >
+                {opt}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       {/* ── Nav ── */}
       <div className="flex items-center justify-between pb-10">
         <button
