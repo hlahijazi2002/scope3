@@ -38,7 +38,7 @@ const INITIAL_STATE: AssessmentState = {
   currentStep: AssessmentStep.WELCOME,
   completedSteps: [],
   activeCategoryId: null,
-
+lastSaved: null,
   companyProfile: {
     name: "",
     industry: "",

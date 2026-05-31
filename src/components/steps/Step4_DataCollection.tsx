@@ -605,7 +605,6 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
 
 export default function Step4_DataCollection() {
   const { goNext, goBack } = useNavigation();
-  const { state } = useAssessment();
 
   const applicableCategories = SCOPE3_CATEGORIES.filter(
     (c) =>
@@ -613,6 +612,7 @@ export default function Step4_DataCollection() {
       ApplicabilityStatus.APPLICABLE,
   );
 
+  const { state, dispatch } = useAssessment();
   const activeCatId =
     state.activeCategoryId ?? applicableCategories[0]?.id ?? 1;
   const setActiveCatId = (id: number) =>
