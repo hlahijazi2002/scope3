@@ -7,9 +7,7 @@ import {
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 import MicroStepper from "../ui/MicroStepper";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // DATA
-// ─────────────────────────────────────────────────────────────────────────────
 
 const AVAILABILITY_OPTIONS = [
   {
@@ -50,16 +48,14 @@ const AVAILABILITY_OPTIONS = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // READINESS GAUGE
-// ─────────────────────────────────────────────────────────────────────────────
 
 function ReadinessGauge({ percent }: { percent: number }) {
   const color =
     percent >= 70 ? "#1FA971" : percent >= 40 ? "#F59E0B" : "#EF4444";
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-28 h-28">
+      <div className="relative w-24 h-24 sm:w-28 sm:h-28">
         <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
           <circle
             cx="50"
@@ -82,7 +78,7 @@ function ReadinessGauge({ percent }: { percent: number }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-[22px] font-bold text-[#1D1F21]">
+          <span className="text-[20px] sm:text-[22px] font-bold text-[#1D1F21]">
             {percent}%
           </span>
           <span className="text-[10px] text-[#6B7280] font-medium">Ready</span>
@@ -92,9 +88,7 @@ function ReadinessGauge({ percent }: { percent: number }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CATEGORY ROW
-// ─────────────────────────────────────────────────────────────────────────────
 
 function CategoryAvailabilityRow({
   catId,
@@ -112,7 +106,7 @@ function CategoryAvailabilityRow({
   const current = AVAILABILITY_OPTIONS.find((o) => o.value === availability);
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E5E7EB] p-5 shadow-sm">
+    <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-5 shadow-sm">
       {/* top */}
       <div className="flex items-center gap-3 mb-4">
         <span className="w-7 h-7 rounded-xl bg-[#F3F4F6] text-[#6B7280] text-[11px] font-bold flex items-center justify-center shrink-0">
@@ -126,7 +120,7 @@ function CategoryAvailabilityRow({
         </div>
         {current && (
           <span
-            className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full border ${current.color} ${current.bg} ${current.border}`}
+            className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full border shrink-0 ${current.color} ${current.bg} ${current.border}`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${current.dot}`} />
             {current.label}
@@ -134,8 +128,8 @@ function CategoryAvailabilityRow({
         )}
       </div>
 
-      {/* options */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* options — 2 cols on mobile, 4 cols on sm+ */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {AVAILABILITY_OPTIONS.map((opt) => {
           const isSelected = availability === opt.value;
           return (
@@ -167,9 +161,7 @@ function CategoryAvailabilityRow({
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function Step5_DataAvailability() {
   const { goNext, goBack } = useNavigation();
@@ -191,7 +183,6 @@ export default function Step5_DataAvailability() {
     });
   };
 
-  // readiness calculation
   const readyCount = applicable.filter((c) => {
     const a = state.categoryResponses[c.id]?.dataAvailability;
     return (
@@ -231,18 +222,18 @@ export default function Step5_DataAvailability() {
   return (
     <div className="max-w-3xl mx-auto">
       {/* ── Header ── */}
-      <div className="flex items-start gap-4 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
-          <ClipboardCheck size={22} className="text-white" />
+      <div className="flex items-start gap-3 sm:gap-4 mb-5 sm:mb-6">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
+          <ClipboardCheck size={20} className="text-white" />
         </div>
         <div>
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
             Step 5 of 6
           </div>
-          <h2 className="text-[22px] font-bold text-[#1D1F21] leading-tight">
+          <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1D1F21] leading-tight">
             Data Availability
           </h2>
-          <p className="text-[13px] text-[#6B7280] mt-1">
+          <p className="text-[12px] sm:text-[13px] text-[#6B7280] mt-1">
             Indicate how readily available data is for each applicable category.
           </p>
         </div>
@@ -255,22 +246,25 @@ export default function Step5_DataAvailability() {
         ]}
         current={readinessPercent > 0 ? 2 : 1}
       />
+
       {/* ── Readiness dashboard ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-6">
-        <div className="flex items-center gap-8">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-6">
+        {/* Stack on mobile, row on sm+ */}
+        <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-8">
           <ReadinessGauge percent={readinessPercent} />
-          <div className="flex-1">
-            <h3 className="text-[15px] font-bold text-[#1D1F21] mb-1">
+          <div className="flex-1 w-full">
+            <h3 className="text-[15px] font-bold text-[#1D1F21] mb-1 text-center sm:text-left">
               Data Readiness Score
             </h3>
-            <p className="text-[12px] text-[#6B7280] mb-4">
+            <p className="text-[12px] text-[#6B7280] mb-4 text-center sm:text-left">
               {readinessPercent >= 70
                 ? "Strong data foundation — ready for quantification."
                 : readinessPercent >= 40
                   ? "Moderate readiness — consider improving key categories."
                   : "Limited data available — focus on high-priority categories first."}
             </p>
-            <div className="grid grid-cols-4 gap-3">
+            {/* 2 cols on mobile, 4 cols on sm+ */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               {[
                 {
                   label: "Available",
@@ -314,7 +308,7 @@ export default function Step5_DataAvailability() {
         </div>
       </div>
 
-      {/* ── warning if low readiness ── */}
+      {/* ── warning ── */}
       {readinessPercent < 40 && applicable.length > 0 && (
         <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
           <AlertTriangle size={16} className="text-amber-500 shrink-0 mt-0.5" />
@@ -355,16 +349,16 @@ export default function Step5_DataAvailability() {
       </div>
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between pb-10">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-10">
         <button
           onClick={goBack}
-          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200"
+          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200 text-center"
         >
           ← Back
         </button>
         <button
           onClick={goNext}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-[#0F5F4B] text-white hover:bg-[#0a4a39] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-[#0F5F4B] text-white hover:bg-[#0a4a39] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
         >
           Next: Review & Submit
           <ChevronRight size={15} />

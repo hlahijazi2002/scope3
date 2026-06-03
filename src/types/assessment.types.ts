@@ -34,17 +34,14 @@ export const OrgBoundary = {
 export type OrgBoundary = (typeof OrgBoundary)[keyof typeof OrgBoundary];
 
 export const AssessmentStep = {
-  WELCOME: 0,
-  COMPANY_PROFILE: 1,
-  OPERATIONAL_SCREENING: 2,
-  SCOPE3_CATEGORIES: 3,
-  DATA_COLLECTION: 4,
-  DATA_AVAILABILITY: 5,
-  REVIEW_SUBMIT: 6,
+  WELCOME:               0,
+  OPERATIONAL_SCREENING: 1,
+  SCOPE3_CATEGORIES:     2,
+  DATA_COLLECTION:       3,
+  DATA_AVAILABILITY:     4,
+  REVIEW_SUBMIT:         5,
 } as const;
-
-export type AssessmentStep =
-  (typeof AssessmentStep)[keyof typeof AssessmentStep];
+export type AssessmentStep = typeof AssessmentStep[keyof typeof AssessmentStep];
 
 export interface CompanyProfile {
   name: string;

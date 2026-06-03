@@ -88,20 +88,14 @@ function ToggleSwitch({
         onClick={() => onChange(value !== true)}
         className={`
           relative w-11 h-6 rounded-full transition-all duration-300 shrink-0
-          ${
-            value === true
-              ? "bg-[#0F5F4B]"
-              : value === false
-                ? "bg-[#E5E7EB]"
-                : "bg-[#E5E7EB]"
-          }
+          ${value === true ? "bg-[#0F5F4B]" : "bg-[#E5E7EB]"}
         `}
       >
         <span
           className={`
             absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm
             transition-all duration-300
-            ${value === true ? "left-5.5" : "left-0.5"}
+            ${value === true ? "left-[22px]" : "left-0.5"}
           `}
         />
       </button>
@@ -163,18 +157,18 @@ export default function Step2_OperationalScreening() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* ── Header ── */}
-      <div className="flex items-start gap-4 mb-8">
-        <div className="w-12 h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
-          <ScanSearch size={22} className="text-white" />
+      <div className="flex items-start gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
+          <ScanSearch size={20} className="text-white" />
         </div>
         <div>
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
             Step 2 of 6
           </div>
-          <h2 className="text-[22px] font-bold text-[#1D1F21] leading-tight">
+          <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1D1F21] leading-tight">
             Operational Screening
           </h2>
-          <p className="text-[13px] text-[#6B7280] mt-1">
+          <p className="text-[12px] sm:text-[13px] text-[#6B7280] mt-1">
             Quick questions to identify your applicable Scope 3 categories.
           </p>
         </div>
@@ -187,6 +181,7 @@ export default function Step2_OperationalScreening() {
         ]}
         current={allAnswered ? 2 : 1}
       />
+
       {/* ── Progress bar ── */}
       <div className="flex items-center gap-3 mb-6">
         <div className="flex-1 h-1.5 bg-[#E5E7EB] rounded-full overflow-hidden">
@@ -209,7 +204,7 @@ export default function Step2_OperationalScreening() {
             <div
               key={q.id}
               className={`
-                bg-white rounded-2xl border transition-all duration-200 p-5
+                bg-white rounded-2xl border transition-all duration-200 p-4 sm:p-5
                 ${
                   isAnswered && val === true
                     ? "border-[#1FA971]/40 shadow-sm"
@@ -219,31 +214,34 @@ export default function Step2_OperationalScreening() {
                 }
               `}
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 {/* number */}
-                <span className="text-[22px] font-bold text-[#E5E7EB] leading-none shrink-0 mt-0.5 tabular-nums">
+                <span className="text-[18px] sm:text-[22px] font-bold text-[#E5E7EB] leading-none shrink-0 mt-0.5 tabular-nums">
                   {q.number}
                 </span>
 
                 {/* content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4">
+                  {/* title + toggle on same row for sm+, stacked on mobile */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
                     <div className="flex-1">
-                      <h3 className="text-[14px] font-semibold text-[#1D1F21] leading-snug mb-1">
+                      <h3 className="text-[13px] sm:text-[14px] font-semibold text-[#1D1F21] leading-snug mb-1">
                         {q.title}
                       </h3>
-                      <p className="text-[12px] text-[#6B7280] leading-relaxed">
+                      <p className="text-[11px] sm:text-[12px] text-[#6B7280] leading-relaxed">
                         {q.desc}
                       </p>
                     </div>
-                    <ToggleSwitch
-                      value={val}
-                      onChange={(v) => setAnswer(q.id, v)}
-                    />
+                    <div className="self-start sm:self-auto">
+                      <ToggleSwitch
+                        value={val}
+                        onChange={(v) => setAnswer(q.id, v)}
+                      />
+                    </div>
                   </div>
 
                   {/* tag + answered indicator */}
-                  <div className="flex items-center gap-2 mt-3">
+                  <div className="flex items-center gap-2 mt-3 flex-wrap">
                     <span className="text-[10px] font-semibold text-[#6B7280] bg-[#F3F4F6] px-2 py-0.5 rounded-full">
                       {q.tag}
                     </span>
@@ -268,7 +266,7 @@ export default function Step2_OperationalScreening() {
 
       {/* ── AI Recommendation panel ── */}
       {showRecommendation && (
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 mb-6 shadow-sm">
+        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-4 sm:p-5 mb-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-6 rounded-lg bg-[#0F5F4B] flex items-center justify-center">
               <Sparkles size={13} className="text-white" />
@@ -313,16 +311,16 @@ export default function Step2_OperationalScreening() {
       )}
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between pb-10">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-10">
         <button
           onClick={goBack}
-          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200"
+          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200 text-center"
         >
           ← Back
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
           {!allAnswered && (
-            <span className="text-[12px] text-[#9CA3AF]">
+            <span className="text-[12px] text-[#9CA3AF] text-center">
               {QUESTIONS.length - answeredCount} questions remaining
             </span>
           )}
@@ -330,7 +328,7 @@ export default function Step2_OperationalScreening() {
             onClick={handleNext}
             disabled={!allAnswered}
             className={`
-              flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold
+              flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold
               transition-all duration-200
               ${
                 allAnswered

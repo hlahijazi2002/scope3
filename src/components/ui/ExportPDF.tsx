@@ -208,9 +208,7 @@ function generatePDF(state: ReturnType<typeof useAssessment>["state"]) {
   doc.save(filename);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function ExportPDF() {
   const { state } = useAssessment();

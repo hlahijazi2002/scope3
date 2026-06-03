@@ -1,19 +1,17 @@
-import { Leaf, CloudCheck } from "lucide-react";
+import { CloudCheck } from "lucide-react";
 import { useNavigation, useAssessment } from "@/hooks/useAssessment";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TYPES
+// CONSTANTS
 // ─────────────────────────────────────────────────────────────────────────────
 
 const STEP_TITLES: Record<number, string> = {
-  1: "Company Profile",
-  2: "Operational Screening",
-  3: "Scope 3 Categories",
-  4: "Data Collection",
-  5: "Data Availability",
-  6: "Review & Submit",
+  1: "Operational Screening & Boundary",
+  2: "Scope 3 Categories",
+  3: "Data Collection",
+  4: "Data Availability",
+  5: "Review & Submit",
 };
-
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -34,35 +32,26 @@ function formatSaved(iso: string | null): string {
 export default function TopBar() {
   const { currentStep, progressPercent } = useNavigation();
   const { state } = useAssessment();
-
-  const TOTAL_STEPS = 6;
+  const TOTAL_STEPS = 5;
 
   return (
-    <header className="relative bg-white border-b border-[#E5E7EB] px-6 h-15 flex items-center justify-between z-50 shadow-sm shrink-0">
+    <header className="relative bg-white border-b border-[#E5E7EB] px-4 sm:px-6 h-14 sm:h-15 flex items-center justify-between z-50 shadow-sm shrink-0">
       {/* ── Logo ── */}
-      <div className="flex items-center gap-2">
-        <div className="w-7.5 h-7.5 rounded-[7px] bg-[#0F5F4B] flex items-center justify-center">
-          <Leaf size={15} className="text-white" />
-        </div>
-        <span className="font-bold text-[15px] text-[#1D1F21] tracking-wide">
-          URIMPACT
-        </span>
-      </div>
-
+      <img className="w-[120px]" src="/logo.png" alt="" />
       {/* ── Step info ── */}
       <div className="flex flex-col items-center">
-        <span className="text-[11px] text-[#6B7280] font-medium">
+        <span className="text-[10px] sm:text-[11px] text-[#6B7280] font-medium">
           Step {currentStep} of {TOTAL_STEPS}
         </span>
-        <span className="text-[13px] font-semibold text-[#1D1F21]">
+        <span className="text-[12px] sm:text-[13px] font-semibold text-[#1D1F21] hidden xs:block">
           {STEP_TITLES[currentStep] ?? "Assessment"}
         </span>
       </div>
 
       {/* ── Save indicator ── */}
-      <div className="flex items-center gap-1.5">
-        <CloudCheck size={14} className="text-[#1FA971]" />
-        <span className="text-[12px] text-[#1FA971] font-medium">
+      <div className="flex items-center gap-1.5 shrink-0">
+        <CloudCheck size={13} className="text-[#1FA971]" />
+        <span className="text-[11px] sm:text-[12px] text-[#1FA971] font-medium hidden sm:block">
           {formatSaved(state.lastSaved)}
         </span>
       </div>

@@ -39,7 +39,7 @@ function SectionHeader({ number, title }: { number: string; title: string }) {
   );
 }
 
-// CATEGORY TAB BAR
+// CATEGORY TAB BAR — horizontally scrollable on all sizes
 function CategoryTabBar({
   categories,
   activeId,
@@ -51,7 +51,7 @@ function CategoryTabBar({
   responses: Record<number, { applicability: string }>;
 }) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
+    <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide -mx-3 px-3 sm:mx-0 sm:px-0">
       {categories.map((cat) => {
         const isActive = cat.id === activeId;
         return (
@@ -59,8 +59,8 @@ function CategoryTabBar({
             key={cat.id}
             onClick={() => onSelect(cat.id)}
             className={`
-              flex items-center gap-2 px-3 py-2 rounded-xl border shrink-0
-              text-[12px] font-semibold transition-all duration-200
+              flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl border shrink-0
+              text-[11px] sm:text-[12px] font-semibold transition-all duration-200
               ${
                 isActive
                   ? "bg-[#0F5F4B] text-white border-[#0F5F4B] shadow-sm"
@@ -73,7 +73,11 @@ function CategoryTabBar({
             >
               {cat.id}
             </span>
-            {cat.name.split(" ").slice(0, 2).join(" ")}
+            {/* Show abbreviated name on mobile */}
+            <span className="sm:hidden">{cat.name.split(" ")[0]}</span>
+            <span className="hidden sm:inline">
+              {cat.name.split(" ").slice(0, 2).join(" ")}
+            </span>
           </button>
         );
       })}
@@ -149,13 +153,12 @@ function PurchasedGoodsPanel() {
   return (
     <>
       {/* ── 1: Procurement categories ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader
           number="1"
           title="What types of goods or services does your organization procure?"
         />
 
-        {/* search */}
         <div className="relative mb-4">
           <Search
             size={14}
@@ -170,7 +173,6 @@ function PurchasedGoodsPanel() {
           />
         </div>
 
-        {/* category accordion */}
         <div className="space-y-2">
           {filteredCategories.map((cat) => {
             const isSelected = purchasedGoods.selectedCategories.includes(cat);
@@ -184,7 +186,6 @@ function PurchasedGoodsPanel() {
                 key={cat}
                 className={`rounded-xl border transition-all duration-200 overflow-hidden ${isSelected ? "border-[#1FA971]/40" : "border-[#E5E7EB]"}`}
               >
-                {/* header */}
                 <button
                   onClick={() => toggleCategory(cat)}
                   className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors ${isSelected ? "bg-[#F3FBF7]" : "bg-white hover:bg-[#F9FAFB]"}`}
@@ -212,7 +213,6 @@ function PurchasedGoodsPanel() {
                   </div>
                 </button>
 
-                {/* sub-items */}
                 {isSelected && (
                   <div className="px-4 py-3 border-t border-[#E5E7EB] bg-[#F9FAFB]">
                     <p className="text-[11px] text-[#9CA3AF] mb-2">
@@ -240,7 +240,6 @@ function PurchasedGoodsPanel() {
                         );
                       })}
                     </div>
-                    {/* examples */}
                     {selectedSubs.length > 0 && (
                       <div className="mt-3 pt-3 border-t border-[#E5E7EB]">
                         <p className="text-[11px] text-[#9CA3AF] mb-1.5">
@@ -269,19 +268,18 @@ function PurchasedGoodsPanel() {
             );
           })}
         </div>
-      </div>
 
-      {/* ── Other field ── */}
-      <div className="mt-3">
-        <input
-          type="text"
-          placeholder="Other goods or services not listed above..."
-          className="w-full px-4 py-2.5 rounded-xl border border-dashed border-[#E5E7EB] text-[13px] font-['Poppins'] text-[#1D1F21] placeholder-[#9CA3AF] outline-none focus:border-[#1FA971] focus:ring-4 focus:ring-[#1FA971]/10 transition-all bg-[#F9FAFB]"
-        />
+        <div className="mt-3">
+          <input
+            type="text"
+            placeholder="Other goods or services not listed above..."
+            className="w-full px-4 py-2.5 rounded-xl border border-dashed border-[#E5E7EB] text-[13px] font-['Poppins'] text-[#1D1F21] placeholder-[#9CA3AF] outline-none focus:border-[#1FA971] focus:ring-4 focus:ring-[#1FA971]/10 transition-all bg-[#F9FAFB]"
+          />
+        </div>
       </div>
 
       {/* ── 2: Supplier capture ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <div className="flex items-center justify-between mb-1">
           <SectionHeader number="2" title="Key Suppliers" />
         </div>
@@ -289,10 +287,10 @@ function PurchasedGoodsPanel() {
           Optional at this stage — improves data accuracy.
         </p>
 
-        {/* supplier table */}
         {purchasedGoods.suppliers.length > 0 && (
-          <div className="border border-[#E5E7EB] rounded-xl overflow-hidden mb-4">
-            <table className="w-full">
+          /* Responsive table: scrolls horizontally on mobile */
+          <div className="border border-[#E5E7EB] rounded-xl overflow-hidden mb-4 overflow-x-auto">
+            <table className="w-full min-w-[480px]">
               <thead>
                 <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
                   {[
@@ -377,7 +375,7 @@ function PurchasedGoodsPanel() {
       </div>
 
       {/* ── 3: Monitoring method ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="3" title="Data Monitoring Method" />
         <p className="text-[12px] text-[#6B7280] mb-3">
           How does your company currently track procurement data?
@@ -408,7 +406,7 @@ function PurchasedGoodsPanel() {
       </div>
 
       {/* ── 4: Data sources ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="4" title="Primary Data Sources" />
         <p className="text-[12px] text-[#6B7280] mb-3">
           Select all systems or sources used for procurement data.
@@ -438,13 +436,13 @@ function PurchasedGoodsPanel() {
         </div>
       </div>
 
-      {/* ── 5: File uploads ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      {/* ── 5: File uploads — 1 col mobile, 2 col sm+ ── */}
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="5" title="Supporting Data Files" />
         <p className="text-[12px] text-[#6B7280] mb-4">
           Upload procurement data files to support your assessment.
         </p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <UploadCard
             title="Procurement Data"
             subTitle="CSV, XLS supported"
@@ -468,7 +466,6 @@ function PurchasedGoodsPanel() {
         </div>
       </div>
 
-      {/* supplier drawer */}
       <SupplierDrawer
         isOpen={drawerOpen}
         onClose={() => {
@@ -654,10 +651,9 @@ function CategoryExtraQuestions({
 
   const selected = response?.selectedSubItems ?? [];
 
-  // Transport modes — Cat 4 & 9
   if (categoryId === 4 || categoryId === 9) {
     return (
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader
           number="2"
           title="Which transportation modes are commonly used?"
@@ -677,11 +673,10 @@ function CategoryExtraQuestions({
     );
   }
 
-  // Waste categories — Cat 5
   if (categoryId === 5) {
     return (
       <>
-        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
           <SectionHeader
             number="2"
             title="Which waste categories does your company generate?"
@@ -698,7 +693,7 @@ function CategoryExtraQuestions({
             ))}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
           <SectionHeader number="3" title="Waste disposal tracking method" />
           <div className="flex flex-wrap gap-2">
             {WASTE_DISPOSAL.map((method) => (
@@ -716,10 +711,9 @@ function CategoryExtraQuestions({
     );
   }
 
-  // Travel modes — Cat 6
   if (categoryId === 6) {
     return (
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader
           number="2"
           title="Which business travel modes are commonly used?"
@@ -739,10 +733,9 @@ function CategoryExtraQuestions({
     );
   }
 
-  // Commute modes — Cat 7
   if (categoryId === 7) {
     return (
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader
           number="2"
           title="Which commuting methods are commonly used?"
@@ -762,15 +755,14 @@ function CategoryExtraQuestions({
     );
   }
 
-  // Cat 15 — financed emissions
   if (categoryId === 15) {
     return (
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader
           number="2"
           title="Does your company currently calculate financed emissions?"
         />
-        <div className="flex gap-3 mt-2">
+        <div className="flex gap-3 mt-2 flex-wrap">
           {["Yes", "No", "Planned for future"].map((opt) => (
             <button
               key={opt}
@@ -788,7 +780,7 @@ function CategoryExtraQuestions({
   return null;
 }
 
-// GENERIC CATEGORY PANEL — updated
+// GENERIC CATEGORY PANEL
 
 function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
   const { state, dispatch } = useAssessment();
@@ -829,8 +821,7 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
 
   return (
     <>
-      {/* overview */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="1" title="Category Overview" />
         <p className="text-[13px] text-[#6B7280] leading-relaxed mb-4">
           {cat.description}
@@ -847,15 +838,13 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
         </div>
       </div>
 
-      {/* category-specific extra questions */}
       <CategoryExtraQuestions
         categoryId={categoryId}
         response={response}
         dispatch={dispatch}
       />
 
-      {/* monitoring method — category specific */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="3" title="Data Monitoring Method" />
         <div className="flex flex-wrap gap-2">
           {monitoringOptions.map((opt) => {
@@ -875,8 +864,7 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
         </div>
       </div>
 
-      {/* data sources */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="4" title="Primary Data Sources" />
         <div className="flex flex-wrap gap-2">
           {dataSourceOptions.map((opt) => {
@@ -896,10 +884,10 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
         </div>
       </div>
 
-      {/* file upload */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      {/* 1 col mobile, 2 col sm+ */}
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <SectionHeader number="5" title="Supporting Files" />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <UploadCard
             title="Activity Data"
             subTitle="CSV, XLS supported"
@@ -915,6 +903,7 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
     </>
   );
 }
+
 // MAIN COMPONENT
 
 export default function Step4_DataCollection() {
@@ -935,18 +924,18 @@ export default function Step4_DataCollection() {
   return (
     <div className="max-w-3xl mx-auto">
       {/* ── Header ── */}
-      <div className="flex items-start gap-4 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
-          <Database size={22} className="text-white" />
+      <div className="flex items-start gap-3 sm:gap-4 mb-5 sm:mb-6">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
+          <Database size={20} className="text-white" />
         </div>
         <div>
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
             Step 4 of 6
           </div>
-          <h2 className="text-[22px] font-bold text-[#1D1F21] leading-tight">
+          <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1D1F21] leading-tight">
             Data Collection
           </h2>
-          <p className="text-[13px] text-[#6B7280] mt-1">
+          <p className="text-[12px] sm:text-[13px] text-[#6B7280] mt-1">
             Provide detailed information for each applicable category.
           </p>
         </div>
@@ -981,7 +970,6 @@ export default function Step4_DataCollection() {
         </div>
       ) : (
         <>
-          {/* category tab bar */}
           <CategoryTabBar
             categories={applicableCategories}
             activeId={activeCatId}
@@ -989,7 +977,6 @@ export default function Step4_DataCollection() {
             responses={state.categoryResponses}
           />
 
-          {/* active category panel */}
           {activeCatId === 1 ? (
             <PurchasedGoodsPanel />
           ) : (
@@ -999,7 +986,7 @@ export default function Step4_DataCollection() {
       )}
 
       {/* ── Supplier Engagement ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-6">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-6">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-5 h-5 rounded-full bg-[#0F5F4B] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
             !
@@ -1013,7 +1000,7 @@ export default function Step4_DataCollection() {
           Does your company engage suppliers for sustainability or emissions
           reporting?
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           {["Yes", "Partially", "No"].map((opt) => {
             const key = `supplier_engagement_${opt}`;
             const isSelected = (
@@ -1038,13 +1025,13 @@ export default function Step4_DataCollection() {
                   });
                 }}
                 className={`
-            flex-1 py-3 rounded-xl border-2 text-[13px] font-semibold transition-all duration-200
-            ${
-              isSelected
-                ? "border-[#0F5F4B] bg-[#F3FBF7] text-[#0F5F4B]"
-                : "border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#1FA971]/40 hover:bg-[#F9FAFB]"
-            }
-          `}
+                  flex-1 py-3 rounded-xl border-2 text-[13px] font-semibold transition-all duration-200
+                  ${
+                    isSelected
+                      ? "border-[#0F5F4B] bg-[#F3FBF7] text-[#0F5F4B]"
+                      : "border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#1FA971]/40 hover:bg-[#F9FAFB]"
+                  }
+                `}
               >
                 {opt}
               </button>
@@ -1052,17 +1039,18 @@ export default function Step4_DataCollection() {
           })}
         </div>
       </div>
+
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between pb-10">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-10">
         <button
           onClick={goBack}
-          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200"
+          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200 text-center"
         >
           ← Back
         </button>
         <button
           onClick={goNext}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-[#0F5F4B] text-white hover:bg-[#0a4a39] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-[#0F5F4B] text-white hover:bg-[#0a4a39] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
         >
           Next: Data Availability
           <ChevronRight size={15} />

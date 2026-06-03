@@ -1,4 +1,12 @@
-import { Bot, BookOpen, ExternalLink, Sparkles } from "lucide-react";
+import { useState } from "react";
+import {
+  Bot,
+  BookOpen,
+  ExternalLink,
+  Sparkles,
+  X,
+  PanelRight,
+} from "lucide-react";
 import { useNavigation, useAssessment } from "@/hooks/useAssessment";
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 import { ApplicabilityStatus } from "@/types/assessment.types";
@@ -31,8 +39,10 @@ const STEP_GUIDANCE: Record<
       },
     ],
     resources: [
-      { label: "GHG Protocol Corporate Standard", url: "#" },
-      { label: "Scope 3 Evaluator Tool", url: "#" },
+      {
+        label: "GHG Protocol — Corporate Value Chain (Scope 3) Standard",
+        url: "https://ghgprotocol.org/corporate-value-chain-scope-3-standard",
+      },
     ],
   },
   2: {
@@ -47,8 +57,10 @@ const STEP_GUIDANCE: Record<
       },
     ],
     resources: [
-      { label: "Scope 3 Category Overview", url: "#" },
-      { label: "Sector Guidance Documents", url: "#" },
+      {
+        label: "GHG Protocol — Corporate Value Chain (Scope 3) Standard",
+        url: "https://ghgprotocol.org/corporate-value-chain-scope-3-standard",
+      },
     ],
   },
   3: {
@@ -67,8 +79,10 @@ const STEP_GUIDANCE: Record<
       },
     ],
     resources: [
-      { label: "GHG Protocol Scope 3 Guide", url: "#" },
-      { label: "Category Calculation Methods", url: "#" },
+      {
+        label: "GHG Protocol — Corporate Value Chain (Scope 3) Standard",
+        url: "https://ghgprotocol.org/corporate-value-chain-scope-3-standard",
+      },
     ],
   },
   4: {
@@ -87,8 +101,10 @@ const STEP_GUIDANCE: Record<
       },
     ],
     resources: [
-      { label: "EEIO Database Guide", url: "#" },
-      { label: "Supplier Engagement Toolkit", url: "#" },
+      {
+        label: "GHG Protocol — Corporate Value Chain (Scope 3) Standard",
+        url: "https://ghgprotocol.org/corporate-value-chain-scope-3-standard",
+      },
     ],
   },
   5: {
@@ -107,38 +123,21 @@ const STEP_GUIDANCE: Record<
       },
     ],
     resources: [
-      { label: "Data Collection Templates", url: "#" },
-      { label: "GHG Data Quality Guide", url: "#" },
-    ],
-  },
-  6: {
-    ai: [
-      "Review all applicable categories before submission — you can edit any section using the sidebar.",
-      "Your applicability assessment forms the basis for your Scope 3 quantification in URIMPACT.",
-    ],
-    ghg: [
       {
-        title: "Reporting Completeness",
-        body: "Disclose all applicable categories. For omitted categories, provide justification in your report.",
+        label: "GHG Protocol — Corporate Value Chain (Scope 3) Standard",
+        url: "https://ghgprotocol.org/corporate-value-chain-scope-3-standard",
       },
-    ],
-    resources: [
-      { label: "GHG Protocol Reporting Guidance", url: "#" },
-      { label: "CDP Scope 3 Disclosure Guide", url: "#" },
     ],
   },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CATEGORY GUIDANCE (dynamic per active category in Step 4)
+// CATEGORY GUIDANCE
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CATEGORY_GUIDANCE: Record<
   number,
-  {
-    ai: string;
-    ghg: { title: string; body: string };
-  }
+  { ai: string; ghg: { title: string; body: string } }
 > = {
   1: {
     ai: "Cat 1 is typically the largest Scope 3 source for manufacturers. Engage top 10 suppliers by spend first.",
@@ -248,14 +247,13 @@ const CATEGORY_GUIDANCE: Record<
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// COMPONENT
+// PANEL CONTENT
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function RightPanel() {
+function PanelContent({ onClose }: { onClose?: () => void }) {
   const { currentStep } = useNavigation();
   const { state } = useAssessment();
 
-  // detect most relevant category for step 4
   const activeCategoryId: number | null = (() => {
     if (currentStep !== 4) return null;
     const applicable = SCOPE3_CATEGORIES.filter(
@@ -271,20 +269,32 @@ export default function RightPanel() {
     ? CATEGORY_GUIDANCE[activeCategoryId]
     : null;
 
-  // summary stats for step 6
   const applicableCount = Object.values(state.categoryResponses).filter(
     (r) => r.applicability === ApplicabilityStatus.APPLICABLE,
   ).length;
 
   return (
-    <aside className="w-67 shrink-0 bg-white border-l border-[#E5E7EB] overflow-y-auto py-5 px-4">
-      {/* ── Dynamic category tip (Step 4 only) ── */}
+    <div className="flex flex-col h-full overflow-y-auto py-5 px-4">
+      {/* mobile close */}
+      {onClose && (
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-[13px] font-bold text-[#1D1F21]">Guidance</span>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-lg border border-[#E5E7EB] flex items-center justify-center hover:bg-[#F9FAFB] transition-colors"
+          >
+            <X size={14} className="text-[#6B7280]" />
+          </button>
+        </div>
+      )}
+
+      {/* Active Category — Step 4 */}
       {currentStep === 4 && catGuidance && (
         <div className="mb-5">
           <div className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest mb-3">
             Active Category
           </div>
-          <div className="bg-linear-to-br from-[#F3FBF7] to-[#e0f4ea] border border-[#c6e9d9] rounded-xl p-3 mb-2">
+          <div className="bg-gradient-to-br from-[#F3FBF7] to-[#e0f4ea] border border-[#c6e9d9] rounded-xl p-3 mb-2">
             <div className="flex items-center gap-1.5 mb-1.5">
               <Sparkles size={11} className="text-[#0F5F4B]" />
               <span className="text-[10px] font-bold text-white bg-[#1FA971] px-1.5 py-0.5 rounded">
@@ -309,7 +319,7 @@ export default function RightPanel() {
         </div>
       )}
 
-      {/* ── Progress summary (Step 3+) ── */}
+      {/* Progress */}
       {currentStep >= 3 && (
         <div className="mb-5">
           <div className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest mb-3">
@@ -334,7 +344,7 @@ export default function RightPanel() {
         </div>
       )}
 
-      {/* ── AI Guidance ── */}
+      {/* AI Guidance */}
       <div className="mb-5">
         <div className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest mb-3">
           AI Guidance
@@ -343,7 +353,7 @@ export default function RightPanel() {
           {guidance.ai.map((tip, i) => (
             <div
               key={i}
-              className="bg-linear-to-br from-[#F3FBF7] to-[#e0f4ea] border border-[#c6e9d9] rounded-xl p-3"
+              className="bg-gradient-to-br from-[#F3FBF7] to-[#e0f4ea] border border-[#c6e9d9] rounded-xl p-3"
             >
               <div className="flex items-center gap-1.5 mb-1.5">
                 <Bot size={11} className="text-[#0F5F4B]" />
@@ -359,7 +369,7 @@ export default function RightPanel() {
         </div>
       </div>
 
-      {/* ── GHG Protocol Guidance ── */}
+      {/* GHG Protocol */}
       <div className="mb-5">
         <div className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest mb-3">
           GHG Protocol
@@ -384,7 +394,7 @@ export default function RightPanel() {
         </div>
       </div>
 
-      {/* ── Resources ── */}
+      {/* Resources */}
       <div>
         <div className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest mb-3">
           Resources
@@ -394,6 +404,8 @@ export default function RightPanel() {
             <a
               key={i}
               href={res.url}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-2 text-[12px] text-[#1F7AE0] hover:underline"
             >
               <ExternalLink size={11} />
@@ -402,6 +414,50 @@ export default function RightPanel() {
           ))}
         </div>
       </div>
-    </aside>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN COMPONENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+export default function RightPanel() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      {/* ── Mobile toggle button — fixed bottom right (above AI FAB) ── */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-24 right-6 z-40 lg:hidden w-12 h-12 rounded-full bg-white border border-[#E5E7EB] text-[#0F5F4B] shadow-lg flex items-center justify-center hover:bg-[#F3FBF7] transition-colors"
+      >
+        <PanelRight size={20} />
+      </button>
+
+      {/* ── Mobile overlay ── */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* ── Mobile drawer — slides from right ── */}
+      <div
+        className={`
+        fixed top-0 right-0 h-full w-[300px] bg-white z-50 shadow-2xl
+        transition-transform duration-300 lg:hidden
+        ${isOpen ? "translate-x-0" : "translate-x-full"}
+      `}
+      >
+        <PanelContent onClose={() => setIsOpen(false)} />
+      </div>
+
+      {/* ── Desktop — always visible ── */}
+      <aside className="hidden lg:flex w-[268px] shrink-0 bg-white border-l border-[#E5E7EB] flex-col">
+        <PanelContent />
+      </aside>
+    </>
   );
 }

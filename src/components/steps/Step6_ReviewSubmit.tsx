@@ -19,9 +19,7 @@ import {
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 import MicroStepper from "../ui/MicroStepper";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // HEATMAP
-// ─────────────────────────────────────────────────────────────────────────────
 
 function CategoryHeatmap() {
   const { state } = useAssessment();
@@ -43,15 +41,16 @@ function CategoryHeatmap() {
       return "bg-[#6BCF9E] text-white";
     if (avail === DataAvailabilityStatus.PLANNED)
       return "bg-blue-400 text-white";
-    return "bg-red-300 text-white";
+    return "bg-[#E5E7EB] text-[#6B7280]";
   };
 
   return (
-    <div className="grid grid-cols-5 gap-2">
+    // 3 cols on mobile, 5 cols on sm+
+    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
       {SCOPE3_CATEGORIES.map((cat) => (
         <div
           key={cat.id}
-          className={`rounded-xl p-3 text-center transition-all duration-300 ${getColor(cat.id)}`}
+          className={`rounded-xl p-2 sm:p-3 text-center transition-all duration-300 ${getColor(cat.id)}`}
         >
           <div className="text-[11px] font-bold mb-0.5">{cat.id}</div>
           <div className="text-[9px] font-medium leading-tight line-clamp-2">
@@ -63,9 +62,7 @@ function CategoryHeatmap() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CATEGORY SUMMARY ROW
-// ─────────────────────────────────────────────────────────────────────────────
+// SUMMARY ROW
 
 function SummaryRow({ catId }: { catId: number }) {
   const { state } = useAssessment();
@@ -103,23 +100,25 @@ function SummaryRow({ catId }: { catId: number }) {
   const avail = availLabel[response.dataAvailability];
 
   return (
-    <div className="flex items-center gap-4 px-5 py-3.5 border-b border-[#E5E7EB] last:border-0 hover:bg-[#F9FAFB] transition-colors">
+    <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-3.5 border-b border-[#E5E7EB] last:border-0 hover:bg-[#F9FAFB] transition-colors">
       <span className="w-6 h-6 rounded-lg bg-[#F3F4F6] text-[#6B7280] text-[10px] font-bold flex items-center justify-center shrink-0">
         {cat.id}
       </span>
-      <span className="flex-1 text-[13px] font-semibold text-[#1D1F21] truncate">
+      <span className="flex-1 text-[12px] sm:text-[13px] font-semibold text-[#1D1F21] truncate">
         {cat.name}
       </span>
-      <span className="text-[11px] text-[#9CA3AF]">{cat.ghgCode}</span>
+      <span className="text-[11px] text-[#9CA3AF] hidden sm:block">
+        {cat.ghgCode}
+      </span>
       {avail && (
         <span
-          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${avail.color} ${avail.bg}`}
+          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${avail.color} ${avail.bg}`}
         >
           {avail.label}
         </span>
       )}
       <button
-        onClick={() => goToStep(4)}
+        onClick={() => goToStep(3)}
         className="text-[11px] text-[#1FA971] font-medium hover:underline shrink-0"
       >
         Edit
@@ -128,9 +127,7 @@ function SummaryRow({ catId }: { catId: number }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function Step6_ReviewSubmit() {
   const { goBack } = useNavigation();
@@ -146,18 +143,18 @@ export default function Step6_ReviewSubmit() {
   return (
     <div className="max-w-3xl mx-auto">
       {/* ── Header ── */}
-      <div className="flex items-start gap-4 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
-          <FileCheck2 size={22} className="text-white" />
+      <div className="flex items-start gap-3 sm:gap-4 mb-5 sm:mb-6">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
+          <FileCheck2 size={20} className="text-white" />
         </div>
         <div>
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
-            Step 6 of 6
+            Step 5 of 5
           </div>
-          <h2 className="text-[22px] font-bold text-[#1D1F21] leading-tight">
+          <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1D1F21] leading-tight">
             Review & Submit
           </h2>
-          <p className="text-[13px] text-[#6B7280] mt-1">
+          <p className="text-[12px] sm:text-[13px] text-[#6B7280] mt-1">
             Review your complete Scope 3 applicability assessment before
             submitting.
           </p>
@@ -172,12 +169,14 @@ export default function Step6_ReviewSubmit() {
         ]}
         current={summary.totalApplicable > 0 ? 3 : 1}
       />
+
       {/* ── Company summary card ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
         <h3 className="text-[14px] font-bold text-[#1D1F21] mb-4">
           Assessment Summary
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        {/* 1 col mobile, 2 col sm+ */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {[
             { label: "Company", value: state.companyProfile.name || "—" },
             { label: "Industry", value: state.companyProfile.industry || "—" },
@@ -207,8 +206,8 @@ export default function Step6_ReviewSubmit() {
         </div>
       </div>
 
-      {/* ── Stats strip ── */}
-      <div className="grid grid-cols-4 gap-3 mb-4">
+      {/* ── Stats strip — 2 cols mobile, 4 cols sm+ ── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
         {[
           {
             label: "Applicable",
@@ -245,10 +244,12 @@ export default function Step6_ReviewSubmit() {
         ].map((s) => (
           <div
             key={s.label}
-            className={`${s.bg} border ${s.border} rounded-2xl p-4`}
+            className={`${s.bg} border ${s.border} rounded-2xl p-3 sm:p-4`}
           >
             <div className={`${s.color} mb-2`}>{s.icon}</div>
-            <div className={`text-[22px] font-bold ${s.color}`}>{s.count}</div>
+            <div className={`text-[20px] sm:text-[22px] font-bold ${s.color}`}>
+              {s.count}
+            </div>
             <div className="text-[11px] text-[#6B7280] font-medium">
               {s.label}
             </div>
@@ -257,17 +258,18 @@ export default function Step6_ReviewSubmit() {
       </div>
 
       {/* ── Heatmap ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm mb-4">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <h3 className="text-[14px] font-bold text-[#1D1F21]">
             Category Heatmap
           </h3>
-          <div className="flex items-center gap-3 text-[10px] font-semibold text-[#6B7280]">
+          {/* Legend wraps on mobile */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[10px] font-semibold text-[#6B7280]">
             {[
-              { label: "Applicable + Available", color: "bg-[#1FA971]" },
-              { label: "Applicable + Partial", color: "bg-[#6BCF9E]" },
+              { label: "Available", color: "bg-[#1FA971]" },
+              { label: "Partial", color: "bg-[#6BCF9E]" },
               { label: "Potential", color: "bg-amber-100" },
-              { label: "Not Applicable", color: "bg-[#F3F4F6]" },
+              { label: "N/A", color: "bg-[#F3F4F6]" },
             ].map((l) => (
               <span key={l.label} className="flex items-center gap-1">
                 <span className={`w-2.5 h-2.5 rounded ${l.color}`} />
@@ -282,7 +284,7 @@ export default function Step6_ReviewSubmit() {
       {/* ── Applicable categories list ── */}
       {summary.applicable.length > 0 && (
         <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm mb-4 overflow-hidden">
-          <div className="px-5 py-4 border-b border-[#E5E7EB]">
+          <div className="px-4 sm:px-5 py-4 border-b border-[#E5E7EB]">
             <h3 className="text-[14px] font-bold text-[#1D1F21]">
               Applicable Categories ({summary.applicable.length})
             </h3>
@@ -302,7 +304,7 @@ export default function Step6_ReviewSubmit() {
               {summary.pending.length} categories still pending review
             </p>
             <p className="text-[12px] text-amber-600 leading-relaxed">
-              Go back to Step 3 to confirm or dismiss these categories before
+              Go back to Step 2 to confirm or dismiss these categories before
               submitting.
             </p>
           </div>
@@ -310,23 +312,23 @@ export default function Step6_ReviewSubmit() {
       )}
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between pb-10">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-10">
         <button
           onClick={goBack}
-          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200"
+          className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#6B7280] hover:text-[#1D1F21] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-all duration-200 text-center"
         >
           ← Back
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
           <button
             onClick={() => window.location.reload()}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#E5E7EB] text-[13px] font-medium text-[#6B7280] hover:bg-white transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#E5E7EB] text-[13px] font-medium text-[#6B7280] hover:bg-white transition-colors"
           >
             <RotateCcw size={14} /> Start Over
           </button>
           <button
             onClick={handleSubmit}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-[#0F5F4B] text-white hover:bg-[#0a4a39] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+            className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-[#0F5F4B] text-white hover:bg-[#0a4a39] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
           >
             <Send size={14} /> Submit Assessment
           </button>

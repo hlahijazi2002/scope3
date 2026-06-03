@@ -5,7 +5,6 @@ import type {
   CategoryResponse,
 } from "@/types/assessment.types";
 import {
-  AssessmentStep,
   ApplicabilityStatus,
   DataAvailabilityStatus,
 } from "@/types/assessment.types";
@@ -35,10 +34,10 @@ const initialCategoryResponses = Object.fromEntries(
 );
 
 const INITIAL_STATE: AssessmentState = {
-  currentStep: AssessmentStep.WELCOME,
+  currentStep: 0,
   completedSteps: [],
   activeCategoryId: null,
-lastSaved: null,
+  lastSaved: null,
   companyProfile: {
     name: "",
     industry: "",
@@ -166,7 +165,7 @@ function assessmentReducer(
 
     case "SET_ACTIVE_CATEGORY":
       return { ...state, activeCategoryId: action.payload };
-      
+
     case "SAVE_PROGRESS":
       return { ...state, lastSaved: new Date().toISOString() };
 
