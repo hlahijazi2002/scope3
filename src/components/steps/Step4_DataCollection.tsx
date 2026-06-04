@@ -922,7 +922,7 @@ export default function Step4_DataCollection() {
     dispatch({ type: "SET_ACTIVE_CATEGORY", payload: id });
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="w-full min-w-0">
       {/* ── Header ── */}
       <div className="flex items-start gap-3 sm:gap-4 mb-5 sm:mb-6">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
