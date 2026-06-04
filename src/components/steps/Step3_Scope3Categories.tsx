@@ -233,7 +233,7 @@ export default function Step3_Scope3Categories() {
   const downstream = SCOPE3_CATEGORIES.filter((c) => !c.isUpstream);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="w-full min-w-0">
       {/* ─ Header ─ */}
       <div className="flex items-start gap-4 mb-6">
         <div className="w-12 h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center  shrink-0">

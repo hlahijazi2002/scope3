@@ -195,7 +195,7 @@ export default function Step1_OperationalScreening() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto min-w-0">
+    <div className="w-full min-w-0">
       {/* ── Header ── */}
       <div className="flex items-start gap-3 sm:gap-4 mb-6">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#0F5F4B] flex items-center justify-center shrink-0">
