@@ -6,9 +6,7 @@ import type {
   SupplierDataAvailability,
 } from "@/types/assessment.types";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface SupplierDrawerProps {
   isOpen: boolean;
@@ -25,9 +23,7 @@ interface FormState {
   dataAvailability: SupplierDataAvailability | null;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CONSTANTS
-// ─────────────────────────────────────────────────────────────────────────────
 
 const SUPPLIER_TYPES = [
   "Metals & Minerals",
@@ -66,9 +62,7 @@ const EMPTY_FORM: FormState = {
   dataAvailability: null,
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function SupplierDrawer({
   isOpen,
@@ -147,29 +141,27 @@ export default function SupplierDrawer({
     set("dataAvailability", v as SupplierDataAvailability);
   };
 
-  // ─────────────────────────────────────────────────────────────────────────
   // RENDER
-  // ─────────────────────────────────────────────────────────────────────────
 
   return (
     <>
       {/* overlay */}
       <div
-        className={`inset-0 bg-black/40 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={` inset-0 bg-black/40 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={onClose}
       />
 
       {/* drawer */}
       <div
         className={`
-          fixed top-0 right-0 h-full w-[420px] bg-white z-50 shadow-2xl
+          fixed top-0 right-0 w-105 bg-white z-50 shadow-2xl
           flex flex-col overflow-hidden
           transition-transform duration-300 ease-in-out
-          ${isOpen ? "translate-x-0" : "translate-x-full"}
+          ${isOpen ? "translate-x-0" : "translate-x-200"}
         `}
       >
         {/* ── Header ── */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E7EB] flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E7EB] shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-[#F3FBF7] flex items-center justify-center">
               <Building2 size={16} className="text-[#0F5F4B]" />
@@ -192,7 +184,7 @@ export default function SupplierDrawer({
         </div>
 
         {/* ── Body ── */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+        <div className=" overflow-y-auto px-6 py-5 space-y-5 h-fit">
           {/* Supplier Name */}
           <div>
             <label className="block text-[13px] font-semibold text-[#1D1F21] mb-1.5">
@@ -322,7 +314,7 @@ export default function SupplierDrawer({
         </div>
 
         {/* ── Footer ── */}
-        <div className="px-6 py-4 border-t border-[#E5E7EB] flex gap-3 flex-shrink-0">
+        <div className="px-6 py-4 border-t border-[#E5E7EB] flex gap-3 shrink-0">
           <button
             onClick={() => handleSave(false)}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#0F5F4B] text-white text-[13px] font-semibold hover:bg-[#0a4a39] transition-colors"

@@ -4,39 +4,37 @@ import { useNavigation, useAssessment } from "@/hooks/useAssessment";
 import { ApplicabilityStatus } from "@/types/assessment.types";
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CONSTANTS
-// ─────────────────────────────────────────────────────────────────────────────
 
 const STEPS = [
   { id: 1, title: "Operational Screening", sub: "Boundary & activities" },
-  { id: 2, title: "Scope 3 Categories",    sub: "Applicability review"  },
-  { id: 3, title: "Data Collection",       sub: "Detailed input"        },
-  { id: 4, title: "Data Availability",     sub: "Readiness check"       },
-  { id: 5, title: "Review & Submit",       sub: "Final confirmation"    },
+  { id: 2, title: "Scope 3 Categories", sub: "Applicability review" },
+  { id: 3, title: "Data Collection", sub: "Detailed input" },
+  { id: 4, title: "Data Availability", sub: "Readiness check" },
+  { id: 5, title: "Review & Submit", sub: "Final confirmation" },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // STATUS DOT
-// ─────────────────────────────────────────────────────────────────────────────
 
 function StatusDot({ status }: { status: string }) {
   const colors: Record<string, string> = {
-    [ApplicabilityStatus.APPLICABLE]:     "bg-[#1FA971]",
+    [ApplicabilityStatus.APPLICABLE]: "bg-[#1FA971]",
     [ApplicabilityStatus.NOT_APPLICABLE]: "bg-[#6B7280] opacity-40",
-    [ApplicabilityStatus.POTENTIAL]:      "bg-amber-400",
-    [ApplicabilityStatus.PENDING]:        "bg-[#E5E7EB]",
+    [ApplicabilityStatus.POTENTIAL]: "bg-amber-400",
+    [ApplicabilityStatus.PENDING]: "bg-[#E5E7EB]",
   };
-  return <span className={`w-2 h-2 rounded-full shrink-0 ${colors[status] ?? "bg-[#E5E7EB]"}`} />;
+  return (
+    <span
+      className={`w-2 h-2 rounded-full shrink-0 ${colors[status] ?? "bg-[#E5E7EB]"}`}
+    />
+  );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SIDEBAR CONTENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 function SidebarContent({ onClose }: { onClose?: () => void }) {
   const { currentStep, goToStep, isStepCompleted } = useNavigation();
-  const { state }                                   = useAssessment();
+  const { state } = useAssessment();
 
   const handleStep = (id: number) => {
     goToStep(id);
@@ -45,11 +43,12 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="flex flex-col h-full py-5 px-3 overflow-y-auto">
-
       {/* ── mobile close button ── */}
       {onClose && (
         <div className="flex items-center justify-between mb-4 px-2">
-          <span className="text-[13px] font-bold text-[#1D1F21]">Navigation</span>
+          <span className="text-[13px] font-bold text-[#1D1F21]">
+            Navigation
+          </span>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-lg border border-[#E5E7EB] flex items-center justify-center hover:bg-[#F9FAFB] transition-colors"
@@ -66,7 +65,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
       <nav className="space-y-0.5 mb-4">
         {STEPS.map((step) => {
-          const isActive    = currentStep === step.id;
+          const isActive = currentStep === step.id;
           const isCompleted = isStepCompleted(step.id);
           return (
             <button
@@ -74,11 +73,17 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
               onClick={() => handleStep(step.id)}
               className={`w-full flex items-center gap-2.5 px-2 py-2.5 rounded-lg text-left transition-all duration-200 ${isActive ? "bg-[#F3FBF7]" : "hover:bg-[#F9FAFB]"}`}
             >
-              <div className={`w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-[11px] font-semibold border-[1.5px] transition-colors ${isActive ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : isCompleted ? "bg-[#1FA971] border-[#1FA971] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280]"}`}>
+              <div
+                className={`w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-[11px] font-semibold border-[1.5px] transition-colors ${isActive ? "bg-[#0F5F4B] border-[#0F5F4B] text-white" : isCompleted ? "bg-[#1FA971] border-[#1FA971] text-white" : "bg-white border-[#E5E7EB] text-[#6B7280]"}`}
+              >
                 {isCompleted && !isActive ? <Check size={12} /> : step.id}
               </div>
               <div className="flex-1 min-w-0">
-                <div className={`text-[12px] font-semibold truncate ${isActive ? "text-[#0F5F4B]" : "text-[#1D1F21]"}`}>{step.title}</div>
+                <div
+                  className={`text-[12px] font-semibold truncate ${isActive ? "text-[#0F5F4B]" : "text-[#1D1F21]"}`}
+                >
+                  {step.title}
+                </div>
                 <div className="text-[11px] text-[#6B7280]">{step.sub}</div>
               </div>
             </button>
@@ -97,8 +102,13 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         {SCOPE3_CATEGORIES.map((cat) => {
           const response = state.categoryResponses[cat.id];
           return (
-            <div key={cat.id} className="flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] text-[#6B7280]">
-              <StatusDot status={response?.applicability ?? ApplicabilityStatus.PENDING} />
+            <div
+              key={cat.id}
+              className="flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] text-[#6B7280]"
+            >
+              <StatusDot
+                status={response?.applicability ?? ApplicabilityStatus.PENDING}
+              />
               <span className="truncate">{cat.name}</span>
             </div>
           );
@@ -108,9 +118,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -134,11 +142,13 @@ export default function Sidebar() {
       )}
 
       {/* ── Mobile drawer ── */}
-      <div className={`
+      <div
+        className={`
         fixed top-0 left-0 h-full w-[280px] bg-white z-50 shadow-2xl
         transition-transform duration-300 lg:hidden
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      `}>
+      `}
+      >
         <SidebarContent onClose={() => setIsOpen(false)} />
       </div>
 

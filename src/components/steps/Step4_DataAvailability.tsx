@@ -163,7 +163,7 @@ function CategoryAvailabilityRow({
 
 // COMPONENT
 
-export default function Step5_DataAvailability() {
+export default function Step4_DataAvailability() {
   const { goNext, goBack } = useNavigation();
   const { state, dispatch } = useAssessment();
 
@@ -228,7 +228,7 @@ export default function Step5_DataAvailability() {
         </div>
         <div>
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
-            Step 5 of 6
+            Step 4 of 5
           </div>
           <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1D1F21] leading-tight">
             Data Availability

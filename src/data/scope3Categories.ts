@@ -303,9 +303,7 @@ export const PURCHASED_GOODS_EXAMPLES: Record<string, string[]> = {
   ],
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // WASTE CATEGORIES
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const WASTE_CATEGORIES = [
   {
@@ -415,9 +413,7 @@ export const WASTE_DISPOSAL_METHODS = [
   "Hazardous treatment",
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TRANSPORT MODES
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const TRANSPORT_MODES = [
   { id: "road", label: "Road Freight", icon: "Truck" },
@@ -427,9 +423,7 @@ export const TRANSPORT_MODES = [
   { id: "courier", label: "Courier / Parcel", icon: "Package" },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // BUSINESS TRAVEL MODES
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const BUSINESS_TRAVEL_MODES = [
   { id: "air", label: "Air Travel", icon: "Plane" },
@@ -439,9 +433,7 @@ export const BUSINESS_TRAVEL_MODES = [
   { id: "hotel", label: "Hotel Accommodation", icon: "Building" },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMMUTE MODES
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const COMMUTE_MODES = [
   { id: "car", label: "Personal Car", icon: "Car" },
@@ -454,9 +446,7 @@ export const COMMUTE_MODES = [
   { id: "company", label: "Company Transport", icon: "BusFront" },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // DATA MONITORING METHODS (shared across categories)
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const MONITORING_METHOD_OPTIONS = [
   { id: "spend_based", label: "Amount Spent (currency-based)" },
@@ -481,9 +471,7 @@ export const PRIMARY_DATA_SOURCES = [
   "Waste Vendor Reports",
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SCOPE 3 CATEGORIES — All 15
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const SCOPE3_CATEGORIES: Scope3CategoryDefinition[] = [
   {

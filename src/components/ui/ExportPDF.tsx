@@ -8,9 +8,7 @@ import {
   DataAvailabilityStatus,
 } from "@/types/assessment.types";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
 
 function getApplicabilityLabel(status: string): string {
   const map: Record<string, string> = {
@@ -32,9 +30,7 @@ function getAvailabilityLabel(status: string): string {
   return map[status] ?? "Not Available";
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // EXPORT FUNCTION
-// ─────────────────────────────────────────────────────────────────────────────
 
 function generatePDF(state: ReturnType<typeof useAssessment>["state"]) {
   const doc = new jsPDF();

@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface AccordionItem {
   id: string;
@@ -18,9 +16,7 @@ interface AccordionProps {
   defaultOpen?: string[];
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SINGLE ACCORDION PANEL
-// ─────────────────────────────────────────────────────────────────────────────
 
 function AccordionPanel({
   item,
@@ -99,9 +95,7 @@ function AccordionPanel({
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function Accordion({
   items,

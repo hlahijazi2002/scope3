@@ -1,8 +1,6 @@
 import { Check } from "lucide-react";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface MicroStep {
   id: number;
@@ -14,9 +12,7 @@ interface MicroStepperProps {
   current: number;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function MicroStepper({ steps, current }: MicroStepperProps) {
   return (

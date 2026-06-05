@@ -20,7 +20,6 @@ import {
   MONITORING_METHOD_OPTIONS,
   PRIMARY_DATA_SOURCES,
 } from "@/data/scope3Categories";
-import UploadCard from "@/components/ui/UploadCard";
 import SupplierDrawer from "@/components/ui/SupplierDrawer";
 import type { Supplier } from "@/types/assessment.types";
 import MicroStepper from "../ui/MicroStepper";
@@ -290,7 +289,7 @@ function PurchasedGoodsPanel() {
         {purchasedGoods.suppliers.length > 0 && (
           /* Responsive table: scrolls horizontally on mobile */
           <div className="border border-[#E5E7EB] rounded-xl overflow-hidden mb-4 overflow-x-auto">
-            <table className="w-full min-w-[480px]">
+            <table className="w-full min-w-120">
               <thead>
                 <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
                   {[
@@ -433,36 +432,6 @@ function PurchasedGoodsPanel() {
               </button>
             );
           })}
-        </div>
-      </div>
-
-      {/* ── 5: File uploads — 1 col mobile, 2 col sm+ ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
-        <SectionHeader number="5" title="Supporting Data Files" />
-        <p className="text-[12px] text-[#6B7280] mb-4">
-          Upload procurement data files to support your assessment.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <UploadCard
-            title="Procurement Data"
-            subTitle="CSV, XLS supported"
-            accept=".csv,.xlsx,.xls"
-          />
-          <UploadCard
-            title="Invoice Data"
-            subTitle="PDF, CSV supported"
-            accept=".pdf,.csv"
-          />
-          <UploadCard
-            title="Spend Data"
-            subTitle="CSV, XLS supported"
-            accept=".csv,.xlsx,.xls"
-          />
-          <UploadCard
-            title="ERP Export"
-            subTitle="XML, JSON, CSV"
-            accept=".xml,.json,.csv"
-          />
         </div>
       </div>
 
@@ -883,30 +852,13 @@ function GenericCategoryPanel({ categoryId }: { categoryId: number }) {
           })}
         </div>
       </div>
-
-      {/* 1 col mobile, 2 col sm+ */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-4">
-        <SectionHeader number="5" title="Supporting Files" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <UploadCard
-            title="Activity Data"
-            subTitle="CSV, XLS supported"
-            accept=".csv,.xlsx"
-          />
-          <UploadCard
-            title="Supporting Docs"
-            subTitle="PDF, CSV supported"
-            accept=".pdf,.csv"
-          />
-        </div>
-      </div>
     </>
   );
 }
 
 // MAIN COMPONENT
 
-export default function Step4_DataCollection() {
+export default function Step3_DataCollection() {
   const { goNext, goBack } = useNavigation();
   const { state, dispatch } = useAssessment();
 
@@ -930,7 +882,7 @@ export default function Step4_DataCollection() {
         </div>
         <div>
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
-            Step 4 of 6
+            Step 3 of 5
           </div>
           <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1D1F21] leading-tight">
             Data Collection
@@ -984,61 +936,6 @@ export default function Step4_DataCollection() {
           )}
         </>
       )}
-
-      {/* ── Supplier Engagement ── */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-6 shadow-sm mb-6">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-5 h-5 rounded-full bg-[#0F5F4B] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
-            !
-          </div>
-          <span className="text-[13px] font-semibold text-[#1D1F21]">
-            Supplier Engagement
-          </span>
-          <div className="flex-1 h-px bg-[#E5E7EB]" />
-        </div>
-        <p className="text-[13px] text-[#6B7280] mb-4">
-          Does your company engage suppliers for sustainability or emissions
-          reporting?
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3">
-          {["Yes", "Partially", "No"].map((opt) => {
-            const key = `supplier_engagement_${opt}`;
-            const isSelected = (
-              state.categoryResponses[1]?.selectedSubItems ?? []
-            ).includes(key);
-            return (
-              <button
-                key={opt}
-                onClick={() => {
-                  const current =
-                    state.categoryResponses[1]?.selectedSubItems ?? [];
-                  const cleaned = current.filter(
-                    (i) => !i.startsWith("supplier_engagement_"),
-                  );
-                  const updated = isSelected ? cleaned : [...cleaned, key];
-                  dispatch({
-                    type: "SET_CATEGORY_RESPONSE",
-                    payload: {
-                      categoryId: 1,
-                      data: { selectedSubItems: updated },
-                    },
-                  });
-                }}
-                className={`
-                  flex-1 py-3 rounded-xl border-2 text-[13px] font-semibold transition-all duration-200
-                  ${
-                    isSelected
-                      ? "border-[#0F5F4B] bg-[#F3FBF7] text-[#0F5F4B]"
-                      : "border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#1FA971]/40 hover:bg-[#F9FAFB]"
-                  }
-                `}
-              >
-                {opt}
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       {/* ── Nav ── */}
       <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-10">

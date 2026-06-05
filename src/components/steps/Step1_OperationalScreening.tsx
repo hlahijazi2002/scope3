@@ -5,9 +5,7 @@ import { OrgBoundary, ApplicabilityStatus } from "@/types/assessment.types";
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 import MicroStepper from "@/components/ui/MicroStepper";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // DATA
-// ─────────────────────────────────────────────────────────────────────────────
 
 const QUESTIONS = [
   {
@@ -52,6 +50,13 @@ const QUESTIONS = [
     desc: "Equity investments, joint ventures, subsidiaries.",
     tag: "Cat 15",
   },
+  {
+    id: "haveFranchise",
+    number: "07",
+    title: "Does your company have Franchise?",
+    desc: "",
+    tag: "Cat 14",
+  },
 ] as const;
 
 type QuestionId = (typeof QUESTIONS)[number]["id"];
@@ -84,9 +89,7 @@ const BOUNDARY_OPTIONS = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 // RECOMMENDATION LOGIC
-// ─────────────────────────────────────────────────────────────────────────────
 
 function getRecommended(a: ToggleAnswers): number[] {
   const base = [1, 2, 3, 5, 6, 7];
@@ -96,12 +99,11 @@ function getRecommended(a: ToggleAnswers): number[] {
   if (a.hasManufacturing) extra.push(2, 5);
   if (a.hasLeasedAssets) extra.push(8, 13);
   if (a.hasInvestments) extra.push(15);
+  if (a.haveFranchise) extra.push(14);
   return [...new Set([...base, ...extra])].sort((a, b) => a - b);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TOGGLE SWITCH
-// ─────────────────────────────────────────────────────────────────────────────
 
 function ToggleSwitch({
   value,
@@ -122,7 +124,7 @@ function ToggleSwitch({
         className={`relative w-11 h-6 rounded-full transition-all duration-300 shrink-0 ${value === true ? "bg-[#0F5F4B]" : "bg-[#E5E7EB]"}`}
       >
         <span
-          className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all duration-300 ${value === true ? "left-[22px]" : "left-0.5"}`}
+          className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all duration-300 ${value === true ? "left-5.5" : "left-0.5"}`}
         />
       </button>
       <span
@@ -134,9 +136,7 @@ function ToggleSwitch({
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function Step1_OperationalScreening() {
   const { goNext, goBack } = useNavigation();
@@ -149,6 +149,7 @@ export default function Step1_OperationalScreening() {
     hasManufacturing: null,
     hasLeasedAssets: null,
     hasInvestments: null,
+    haveFranchise: null,
   });
 
   const answeredCount = Object.values(answers).filter((v) => v !== null).length;

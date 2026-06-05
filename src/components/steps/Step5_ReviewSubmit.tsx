@@ -129,7 +129,7 @@ function SummaryRow({ catId }: { catId: number }) {
 
 // COMPONENT
 
-export default function Step6_ReviewSubmit() {
+export default function Step5_ReviewSubmit() {
   const { goBack } = useNavigation();
   const { state } = useAssessment();
   const summary = useAssessmentSummary();

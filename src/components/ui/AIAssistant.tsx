@@ -4,9 +4,7 @@ import { useAssessment } from "@/hooks/useAssessment";
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 import { ApplicabilityStatus } from "@/types/assessment.types";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface Message {
   id: string;
@@ -14,9 +12,7 @@ interface Message {
   content: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SUGGESTED QUESTIONS PER STEP
-// ─────────────────────────────────────────────────────────────────────────────
 
 const SUGGESTIONS: Record<number, string[]> = {
   1: [
@@ -51,9 +47,7 @@ const SUGGESTIONS: Record<number, string[]> = {
   ],
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SYSTEM PROMPT BUILDER
-// ─────────────────────────────────────────────────────────────────────────────
 
 function buildSystemPrompt(
   state: ReturnType<typeof useAssessment>["state"],
@@ -91,9 +85,7 @@ Rules:
 - If unsure, recommend consulting the GHG Protocol Technical Guidance`;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // MESSAGE BUBBLE
-// ─────────────────────────────────────────────────────────────────────────────
 
 function MessageBubble({ message }: { message: Message }) {
   const isUser = message.role === "user";
@@ -128,9 +120,7 @@ function MessageBubble({ message }: { message: Message }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPING INDICATOR
-// ─────────────────────────────────────────────────────────────────────────────
 
 function TypingIndicator() {
   return (
@@ -151,9 +141,7 @@ function TypingIndicator() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function AIAssistant() {
   const { state } = useAssessment();

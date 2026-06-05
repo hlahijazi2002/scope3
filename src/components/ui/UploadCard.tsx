@@ -1,9 +1,7 @@
 import { useState, useRef } from "react";
 import { Upload, CheckCircle2, FileText, X } from "lucide-react";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface UploadedFile {
   name: string;
@@ -17,9 +15,7 @@ interface UploadCardProps {
   onUpload?: (file: File) => void;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -27,9 +23,7 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function UploadCard({
   title,

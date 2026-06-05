@@ -6,27 +6,23 @@ import Sidebar from "@/components/layout/Sidebar";
 import RightPanel from "@/components/layout/RightPanel";
 import WelcomeScreen from "@/components/steps/WelcomeScreen";
 import Step1_OperationalScreening from "@/components/steps/Step1_OperationalScreening";
-import Step3_Scope3Categories from "@/components/steps/Step3_Scope3Categories";
-import Step4_DataCollection from "@/components/steps/Step4_DataCollection";
-import Step5_DataAvailability from "@/components/steps/Step5_DataAvailability";
-import Step6_ReviewSubmit from "@/components/steps/Step6_ReviewSubmit";
+import Step2_Scope3Categories from "@/components/steps/Step2_Scope3Categories";
+import Step3_DataCollection from "@/components/steps/Step3_DataCollection";
+import Step4_DataAvailability from "@/components/steps/Step4_DataAvailability";
+import Step5_ReviewSubmit from "@/components/steps/Step5_ReviewSubmit";
 import AIAssistant from "@/components/ui/AIAssistant";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // STEP RENDERER
-// ─────────────────────────────────────────────────────────────────────────────
 
 const STEPS: Record<number, React.ReactNode> = {
   1: <Step1_OperationalScreening />,
-  2: <Step3_Scope3Categories />,
-  3: <Step4_DataCollection />,
-  4: <Step5_DataAvailability />,
-  5: <Step6_ReviewSubmit />,
+  2: <Step2_Scope3Categories />,
+  3: <Step3_DataCollection />,
+  4: <Step4_DataAvailability />,
+  5: <Step5_ReviewSubmit />,
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // INNER APP
-// ─────────────────────────────────────────────────────────────────────────────
 
 function AppInner() {
   const { state } = useAssessment();
@@ -77,9 +73,7 @@ function AppInner() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // ROOT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function App() {
   return (

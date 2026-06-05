@@ -1,9 +1,7 @@
 import { CloudCheck } from "lucide-react";
 import { useNavigation, useAssessment } from "@/hooks/useAssessment";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CONSTANTS
-// ─────────────────────────────────────────────────────────────────────────────
 
 const STEP_TITLES: Record<number, string> = {
   1: "Operational Screening & Boundary",
@@ -12,9 +10,8 @@ const STEP_TITLES: Record<number, string> = {
   4: "Data Availability",
   5: "Review & Submit",
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 // HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
 
 function formatSaved(iso: string | null): string {
   if (!iso) return "Not saved yet";
@@ -25,9 +22,7 @@ function formatSaved(iso: string | null): string {
   return "Saved";
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function TopBar() {
   const { currentStep, progressPercent } = useNavigation();

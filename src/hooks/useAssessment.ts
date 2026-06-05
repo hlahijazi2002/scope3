@@ -7,16 +7,12 @@ import type {
   Supplier,
 } from "@/types/assessment.types";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // STEPS CONFIG
-// ─────────────────────────────────────────────────────────────────────────────
 
 const FIRST_STEP = 0;
 const LAST_STEP = 5;
 
-// ─────────────────────────────────────────────────────────────────────────────
 // BASE HOOK
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function useAssessment(): AssessmentContextType {
   const ctx = useContext(AssessmentContext);
@@ -25,9 +21,7 @@ export function useAssessment(): AssessmentContextType {
   return ctx;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // NAVIGATION
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function useNavigation() {
   const { state, dispatch } = useAssessment();
@@ -58,9 +52,7 @@ export function useNavigation() {
   };
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPANY PROFILE
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function useCompanyProfile() {
   const { state, dispatch } = useAssessment();
@@ -82,9 +74,7 @@ export function useCompanyProfile() {
   return { profile: state.companyProfile, updateField, isProfileComplete };
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CATEGORY RESPONSE
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function useCategoryResponse(categoryId: number) {
   const { state, dispatch } = useAssessment();
@@ -132,9 +122,7 @@ export function useCategoryResponse(categoryId: number) {
   };
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // PURCHASED GOODS
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function usePurchasedGoods() {
   const { state, dispatch } = useAssessment();
@@ -174,9 +162,7 @@ export function usePurchasedGoods() {
   };
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SUMMARY
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function useAssessmentSummary() {
   const { state } = useAssessment();

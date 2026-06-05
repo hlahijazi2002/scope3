@@ -34,14 +34,15 @@ export const OrgBoundary = {
 export type OrgBoundary = (typeof OrgBoundary)[keyof typeof OrgBoundary];
 
 export const AssessmentStep = {
-  WELCOME:               0,
+  WELCOME: 0,
   OPERATIONAL_SCREENING: 1,
-  SCOPE3_CATEGORIES:     2,
-  DATA_COLLECTION:       3,
-  DATA_AVAILABILITY:     4,
-  REVIEW_SUBMIT:         5,
+  SCOPE3_CATEGORIES: 2,
+  DATA_COLLECTION: 3,
+  DATA_AVAILABILITY: 4,
+  REVIEW_SUBMIT: 5,
 } as const;
-export type AssessmentStep = typeof AssessmentStep[keyof typeof AssessmentStep];
+export type AssessmentStep =
+  (typeof AssessmentStep)[keyof typeof AssessmentStep];
 
 export interface CompanyProfile {
   name: string;
@@ -54,9 +55,7 @@ export interface CompanyProfile {
   hasManufacturing: boolean | null;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SCOPE 3 CATEGORY DEFINITION (static data shape)
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface Scope3CategoryDefinition {
   id: number;
@@ -68,9 +67,7 @@ export interface Scope3CategoryDefinition {
   isUpstream: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SUPPLIER
-// ─────────────────────────────────────────────────────────────────────────────
 
 export type SupplierDataAvailability =
   | "available"
@@ -86,9 +83,7 @@ export interface Supplier {
   dataAvailability: SupplierDataAvailability;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CATEGORY-SPECIFIC DATA
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface PurchasedGoodsData {
   selectedCategories: string[];
@@ -119,9 +114,7 @@ export interface CommuteData {
   modes: string[];
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // PER-CATEGORY RESPONSE (user answers)
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface CategoryResponse {
   categoryId: number;
@@ -134,9 +127,7 @@ export interface CategoryResponse {
   notes: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // FULL ASSESSMENT STATE
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface AssessmentState {
   currentStep: number;
@@ -158,9 +149,7 @@ export interface AssessmentState {
   commuteData: CommuteData;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // ACTIONS
-// ─────────────────────────────────────────────────────────────────────────────
 
 export type AssessmentAction =
   | { type: "SET_STEP"; payload: number }
@@ -182,9 +171,7 @@ export type AssessmentAction =
   | { type: "RESET_ASSESSMENT" }
   | { type: "SET_ACTIVE_CATEGORY"; payload: number | null };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CONTEXT TYPE
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface AssessmentContextType {
   state: AssessmentState;

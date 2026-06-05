@@ -11,9 +11,7 @@ import { useNavigation, useAssessment } from "@/hooks/useAssessment";
 import { SCOPE3_CATEGORIES } from "@/data/scope3Categories";
 import { ApplicabilityStatus } from "@/types/assessment.types";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // GUIDANCE DATA
-// ─────────────────────────────────────────────────────────────────────────────
 
 const STEP_GUIDANCE: Record<
   number,
@@ -131,9 +129,7 @@ const STEP_GUIDANCE: Record<
   },
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // CATEGORY GUIDANCE
-// ─────────────────────────────────────────────────────────────────────────────
 
 const CATEGORY_GUIDANCE: Record<
   number,
@@ -246,9 +242,7 @@ const CATEGORY_GUIDANCE: Record<
   },
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // PANEL CONTENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 function PanelContent({ onClose }: { onClose?: () => void }) {
   const { currentStep } = useNavigation();
@@ -418,9 +412,7 @@ function PanelContent({ onClose }: { onClose?: () => void }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function RightPanel() {
   const [isOpen, setIsOpen] = useState(false);

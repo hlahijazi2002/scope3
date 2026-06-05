@@ -10,9 +10,7 @@ import {
 } from "@/types/assessment.types";
 import { AssessmentContext } from "@/context/AssessmentContextDef";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // DEFAULT CATEGORY RESPONSE
-// ─────────────────────────────────────────────────────────────────────────────
 
 const defaultCategoryResponse = (categoryId: number): CategoryResponse => ({
   categoryId,
@@ -25,9 +23,7 @@ const defaultCategoryResponse = (categoryId: number): CategoryResponse => ({
   notes: "",
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
 // INITIAL STATE
-// ─────────────────────────────────────────────────────────────────────────────
 
 const initialCategoryResponses = Object.fromEntries(
   Array.from({ length: 15 }, (_, i) => [i + 1, defaultCategoryResponse(i + 1)]),
@@ -70,9 +66,7 @@ const INITIAL_STATE: AssessmentState = {
   commuteData: { workforceType: null, modes: [] },
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
 // REDUCER
-// ─────────────────────────────────────────────────────────────────────────────
 
 function assessmentReducer(
   state: AssessmentState,
@@ -178,9 +172,7 @@ function assessmentReducer(
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // PERSISTENCE
-// ─────────────────────────────────────────────────────────────────────────────
 
 const STORAGE_KEY = "urimpact_scope3_assessment";
 
@@ -203,9 +195,7 @@ function saveToStorage(state: AssessmentState): void {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // PROVIDER
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(

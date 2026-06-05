@@ -172,7 +172,7 @@ function CategoryCard({
 
 // COMPONENT
 
-export default function Step3_Scope3Categories() {
+export default function Step2_Scope3Categories() {
   const { goNext, goBack } = useNavigation();
   const { state, dispatch } = useAssessment();
 
@@ -241,7 +241,7 @@ export default function Step3_Scope3Categories() {
         </div>
         <div className="flex-1">
           <div className="text-[11px] font-semibold text-[#1FA971] uppercase tracking-widest mb-1">
-            Step 3 of 6
+            Step 2 of 5
           </div>
           <h2 className="text-[22px] font-bold text-[#1D1F21] leading-tight">
             Scope 3 Categories
